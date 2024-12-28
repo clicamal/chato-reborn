@@ -25,10 +25,94 @@ loadenv();
 
     <script src="static/scripts/get.js"></script>
     <script src="static/scripts/post.js"></script>
+
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            padding: 0;
+            height: calc(100vh - 30px);
+            width: calc(100vw - 30px);
+            padding: 15px;
+        }
+
+        header {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        a {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f0f0f0;
+            text-decoration: none;
+            color: black;
+        }
+
+        #messages {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            flex: 1;
+            overflow-y: scroll;
+        }
+
+        .message {
+            margin-bottom: 1rem;
+        }
+
+        .message .username {
+            font-weight: bold;
+        }
+
+        .message .message-content {
+            margin-left: 1rem;
+            word-break: break-word;
+        }
+
+        #message-form {
+            margin-top: 1rem;
+            display: flex;
+            flex-direction: row;
+            flex: initial;
+        }
+
+        #message-form input {
+            flex: 1;
+        }
+
+        input {
+            padding: 10px;
+            width: 200px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px;
+            width: 200px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f0f0f0;
+        }
+    </style>
 </head>
 
 <body>
-    <h1>Chat</h1>
+    <header>
+        <h1>Chat</h1>
+
+        <a href="logout.php">Logout</a>
+    </header>
 
     <ul id="messages">
         <template id="message-template">
@@ -40,7 +124,7 @@ loadenv();
     </ul>
 
     <form id="message-form" action="api/send-message.php" method="post">
-        <input type="text" name="content" placeholder="Content">
+        <input type="text" name="content" placeholder="Content" autocomplete="off">
 
         <button type="submit">Send</button>
     </form>
@@ -67,6 +151,8 @@ loadenv();
             span.textContent = message.content;
 
             messagesElement.appendChild(clone);
+
+            messagesElement.scrollTop = messagesElement.scrollHeight;
         }
 
         document.getElementById("message-form").addEventListener("submit", async function (event) {
