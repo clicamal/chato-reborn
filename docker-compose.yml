@@ -1,0 +1,39 @@
+services:
+  web-server:
+    image: php:7.2-apache
+
+    build:
+      context: .
+      dockerfile: Dockerfile.web-server
+    
+    ports:
+      - "80:${WEBSERVER_BIND_PORT}"
+
+    volumes:
+      - ./web-server:/var/www/html
+      - ./.env:/var/www/html/.env
+
+  web-socket-server:
+    image: node:18
+
+    build:
+      context: .
+      dockerfile: Dockerfile.web-socket-server
+
+    ports:
+      - "90:${SOCKET_SERVER_BIND_PORT}"
+
+    volumes:
+      - ./web-socket-server:/var/www/nodejs
+      - ./.env:/var/www/nodejs/.env
+    
+    command: node /var/www/nodejs/socket-server.js
+
+  mysql:
+    image: mysql:8.4.3
+
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: chato_reborn
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
